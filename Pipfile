@@ -9,6 +9,7 @@ seaborn = "*"
 numpy = "*"
 matplotlib = "*"
 scikit-learn = "*"
+scipy = "*"
 
 [dev-packages]
 ipykernel = "*"
