@@ -1,21 +1,24 @@
 
 import pandas as pd
-from joblib import load as ld
+import joblib
 
-test_data = pd.read_csv("MachineLearning-Joakim-Roberg\\Lab\\Data\\test_samples.csv", index_col= "id")
+test_samples = pd.read_csv("Lab/Data/test_samples.csv", index_col=0)
 
-model = ld('MachineLearning-Joakim-Roberg\\Lab\\voting_clf.pkl')
+model = joblib.load('Lab/Data/voting_clf.pkl')
 
-X_test = test_data.drop("cardio", axis = 1)
+# use trained model to predict on test_samples
+X_test = test_samples.drop('cardio', axis=1)
+y_test = test_samples['cardio']
 
-probabilities = model.predict_proba(X_test)
 
-predictions = model.predict(X_test)
 
-results = pd.DataFrame({
-    'probability class 0': probabilities[:, 0],
-    'probability class 1': probabilities[:, 1],
-    'prediction': predictions
-})
+y_pred = model.predict_proba(X_test)
 
-results.to_csv("MachineLearning-Joakim-Roberg\\Lab\\predictions.csv")
+print("Accuracy score: ", model.score(X_test, y_test))
+
+
+predictions = pd.DataFrame(y_pred, columns=['Probability class 0', 'Probability class 1'])
+predictions['Prediction'] = model.predict(X_test)
+
+# export the predictions to a csv file
+predictions.to_csv('Lab/Data/predictions.csv', index=False)
